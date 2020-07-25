@@ -121,7 +121,8 @@ From: centos:7.6
 %environment
 	export LC_ALL=C
   	export PATH=/opt/TurboVNC/bin:${PATH}
-	export XAUTHORITY=$HOME/.Xauthtority
+	export PATH=/opt/slurm/bin:${PATH}
+	export XAUTHORITY=$HOME/.Xauthority
 	export XDG_CONFIG_HOME=$HOME
     export LANG="en_US.UTF-8"
     export LANGUAGE="en_US"
