@@ -110,6 +110,6 @@ From: centos:centos7
 
 
 %startscript
-    chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 2>&1 || true
-    chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity 2>&1 || true
-	vncserver -wm startxfce4 -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+    chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
+    chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
+    vncserver -wm startxfce4 -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
