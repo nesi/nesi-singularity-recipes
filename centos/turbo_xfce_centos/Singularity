@@ -1,27 +1,6 @@
 Bootstrap: library
 From: centos:7.6
 
-
-%apprun kill
-
-	vncserver -kill ":$1"
-
-#%appenv start
-##
-#	export DISPLAY=":$1"
-#
-#%apprun start
-#
-#	vncserver -wm startxfce4 -geometry 1920x1080 -securitytypes TLSNone,X509None,None ":$1"
-
-%apprun connect
-
-	/opt/websockify/run --web /opt/noVNC/ $1 $HOSTNAME:$2
-
-%apprun vnclist
-	
-	vncserver -list
-
 %post
 	export TURBOVNC_VERSION=2.2.4
 	export WEBSOCKIFY_VERSION=0.9.0
@@ -128,3 +107,9 @@ From: centos:7.6
     export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
 	#export LD_PRELOAD=/opt/websockify/rebind.so:${LD_PRELOAD} # Websocketify bind l
+
+
+%startscript
+    chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 2>&1 || true
+    chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity 2>&1 || true
+	vncserver -wm startxfce4 -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
