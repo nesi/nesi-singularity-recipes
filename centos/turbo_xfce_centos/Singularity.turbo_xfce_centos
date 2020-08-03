@@ -1,5 +1,5 @@
-Bootstrap: yum
-From: centos:7.6
+BootStrap: docker
+From: centos:centos7
 
 %post
 	export TURBOVNC_VERSION=2.2.4
