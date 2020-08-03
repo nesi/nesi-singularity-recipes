@@ -1,4 +1,4 @@
-Bootstrap: library
+Bootstrap: yum
 From: centos:7.6
 
 %post
