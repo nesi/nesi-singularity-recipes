@@ -1,6 +1,6 @@
-BootStrap: yum
+Bootstrap: yum
 OSVersion: 7
-MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
+MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/x86_64/
 Include: yum
 
 %post
