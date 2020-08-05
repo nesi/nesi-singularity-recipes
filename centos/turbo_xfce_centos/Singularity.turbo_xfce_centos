@@ -1,5 +1,7 @@
-BootStrap: library
-From: centos:centos7
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
+Include: yum
 
 %post
 	export TURBOVNC_VERSION=2.2.4
