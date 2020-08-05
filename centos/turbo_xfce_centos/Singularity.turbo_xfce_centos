@@ -1,4 +1,4 @@
-BootStrap: docker
+BootStrap: library
 From: centos:centos7
 
 %post
