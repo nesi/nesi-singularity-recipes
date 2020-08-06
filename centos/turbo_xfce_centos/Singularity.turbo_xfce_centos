@@ -7,6 +7,7 @@ From: centos:centos7
 	export WEBSOCKIFY_VERSION=0.9.0
 	export FIREFOX_VERSION=9.0
 	export VGL_VERSION=2.6.3
+	export DESKTOP_VERSION=2.0
 
 	yum -y update
 	yum -y upgrade 
@@ -65,18 +66,6 @@ From: centos:centos7
     #yumdownloader --source VirtualGL-$VGL_VERSION
     #debuginfo-install -y VirtualGL #remove me. Probably.
 
-	#Websocketify
-  	mkdir -p /opt/websockify
-	cd /opt/websockify
-  	wget https://github.com/novnc/websockify/archive/v${WEBSOCKIFY_VERSION}.tar.gz -q
-	tar -xzf v${WEBSOCKIFY_VERSION}.tar.gz --strip-components=1
-	rm -rf v${WEBSOCKIFY_VERSION}.tar.gz
-	python setup.py install
-  	make #-C websockify
-	cp rebind.so websockify
-	# Modify thing to have message
-	sed -ir '/self.msg(\"\%s\", msg)*/i \\tmsg+=\"\\n  - Now open a browser to http://localhost:\" + str\(os.getenv\(\"INBOUND_PORT\"\)\) + \" \(assuming it was the port you forwarded.\)\\n  - Press CTRL \+ C to kill."' websockify/websocketproxy.py
-
 	#Firefox 
 	mkdir -p /opt/firefox
 	cd /opt/firefox
@@ -84,19 +73,12 @@ From: centos:centos7
 	tar -xjf firefox-${FIREFOX_VERSION}.tar.bz2
 	rm -rf firefox-${FIREFOX_VERSION}.tar.bz2
 
-	# NoVNC
-	cd /opt
-	git clone https://github.com/novnc/noVNC/
-
-	#Create redirect
-	echo "<meta http-equiv=\"refresh\" content=\"0; URL='vnc.html'\"/>" > noVNC/index.html
-
-	# Stops some warnings
-	#xfconf-query -c xfce4-session -p /startup/ssh-agent/enabled -n -t bool -s false
-	#xfconf-query -c xfce4-session -p /startup/gpg-agent/enabled -n -t bool -s false
-
-	#X -configure # create xcof
-	#Xorg :1 -configure
+cat <<EOF > /opt/TurboVNC/xtartup_nesi
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+startxfce4 &
+EOF
 
 %environment
 	export LC_ALL=C
@@ -110,6 +92,7 @@ From: centos:centos7
 
 
 %startscript
-    chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 2>&1 || true
-    chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity 2>&1 || true
-	vncserver -wm startxfce4 -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+    echo "Desktop Version $DESKTOP_VERSION"
+    #chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
+    #chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
+    vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
