@@ -94,7 +94,7 @@ EOF
 
 
 %startscript
-	echo "Desktop Version $DESKTOP_VERSION"
+    echo "Desktop Version $DESKTOP_VERSION"
     #chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
     #chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
-    vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/TurboVNC/xtartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+    vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
