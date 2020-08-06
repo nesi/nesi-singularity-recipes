@@ -1,5 +1,6 @@
-Bootstrap: yum
-From: centos:7.6
+BootStrap: docker
+From: centos:centos7
+
 
 %post
 	export TURBOVNC_VERSION=2.2.4
@@ -106,7 +107,6 @@ From: centos:7.6
     export LANG="en_US.UTF-8"
     export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
-	#export LD_PRELOAD=/opt/websockify/rebind.so:${LD_PRELOAD} # Websocketify bind l
 
 
 %startscript
