@@ -15,13 +15,12 @@ From: centos:centos7
 
 	yum -y --enablerepo=epel install htop
 	yum -y --enablerepo=epel install VirtualGL
-	#rpm -e VirtualGL --allmatches
-	#yum install VirtualGL*.rpm
+
 
 	yum -y groups install "X Window System"
-	yum -y groupinstall xfce
+	yum -y groupinstall "Xfce"
     yum -y install gnome-terminal
- 	yum -y install -y xfce-polkit # Needed to stop annoying policykit message.
+ 	#yum -y install -y xfce-polkit # Needed to stop annoying policykit message.
 
 
 	yum -y install less
@@ -34,27 +33,18 @@ From: centos:centos7
 	yum -y install libvncserver
 	yum -y install turbojpeg
 	yum -y install -y gcc-c++ # Needed to compile Websocketify rebind lib.
-    #yum install -y libgtk2.0-dev 
-    #yum install -y gtk3-engines-xfce 
 
 	yum -y install mesa-libGLU
-	
-
-    #yum install -y libgtk-3-bin
-	#yum install -y strace
 
 	mkdir -p /etc/yum.repos.d
     cd /etc/yum.repos.d
 	wget https://virtualgl.org/pmwiki/uploads/Downloads/VirtualGL.repo
     yum -y install VirtualGL
 
-  
-
 	wget https://sourceforge.net/projects/turbovnc/files/${TURBOVNC_VERSION}/turbovnc-${TURBOVNC_VERSION}.x86_64.rpm -q
   	yum install -y turbovnc-${TURBOVNC_VERSION}.x86_64.rpm
   	rm -rf turbovnc-${TURBOVNC_VERSION}.x86_64.rpm
-	echo "\$wm=\"startxfce4\";" >> /etc/turbovncserver.conf
-	#echo "\$useVGL=1;" >> /etc/turbovncserver.conf Disabling VGL for now
+	#echo "\$wm=\"startxfce4\";" >> /etc/turbovncserver.conf
 	
     # VGL
     #mkdir -p /etc/yum.repos.d
@@ -73,19 +63,12 @@ From: centos:centos7
 	tar -xjf firefox-${FIREFOX_VERSION}.tar.bz2
 	rm -rf firefox-${FIREFOX_VERSION}.tar.bz2
 
-cat <<EOF > /opt/TurboVNC/xtartup_nesi
-#!/bin/sh
-unset SESSION_MANAGER
-unset DBUS_SESSION_BUS_ADDRESS
-startxfce4 &
-EOF
-
 %environment
 	export LC_ALL=C
   	export PATH=/opt/TurboVNC/bin:${PATH}
 	export PATH=/opt/slurm/bin:${PATH}
-	export XAUTHORITY=$HOME/.Xauthority
-	export XDG_CONFIG_HOME=$HOME
+	#export XAUTHORITY=$HOME/.Xauthority
+	#export XDG_CONFIG_HOME=$HOME
     export LANG="en_US.UTF-8"
     export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
