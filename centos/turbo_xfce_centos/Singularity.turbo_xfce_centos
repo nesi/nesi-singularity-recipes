@@ -19,14 +19,14 @@ From: centos:centos7
 
 	yum -y groups install "X Window System"
 	yum -y groupinstall "Xfce"
-    yum -y install gnome-terminal
+    	yum -y install gnome-terminal
  	#yum -y install -y xfce-polkit # Needed to stop annoying policykit message.
 
 
 	yum -y install less
 	yum -y install wget
 	yum -y install python
-    yum -y install numpy
+    	yum -y install numpy
 	yum -y install git
 	yum -y install bzip2
 	yum -y install polkit
@@ -37,9 +37,9 @@ From: centos:centos7
 	yum -y install mesa-libGLU
 
 	mkdir -p /etc/yum.repos.d
-    cd /etc/yum.repos.d
+    	cd /etc/yum.repos.d
 	wget https://virtualgl.org/pmwiki/uploads/Downloads/VirtualGL.repo
-    yum -y install VirtualGL
+    	yum -y install VirtualGL
 
 	wget https://sourceforge.net/projects/turbovnc/files/${TURBOVNC_VERSION}/turbovnc-${TURBOVNC_VERSION}.x86_64.rpm -q
   	yum install -y turbovnc-${TURBOVNC_VERSION}.x86_64.rpm
@@ -73,9 +73,25 @@ From: centos:centos7
     export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
 
+%apptest1
+    vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+%apptest2
+    vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+%apptest3
+    vncserver -securitytypes TLSNone,X509None,None "$@"
 
 %startscript
     echo "Desktop Version $DESKTOP_VERSION"
     #chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
     #chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
     vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+    
+%runscript
+    echo "Desktop Version $DESKTOP_VERSION"
+    echo "Using inputs $@"
+    #chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
+    #chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
+    #-log "/opt/nesi/vdt/logs/$USER.log" 
+    #-xstartup /opt/nesi/vdt/xstartup_nesi
+    vncserver  -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+
