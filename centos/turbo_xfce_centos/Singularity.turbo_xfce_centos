@@ -1,6 +1,12 @@
 BootStrap: docker
 From: centos:centos7
 
+%apptest1
+    vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+%apptest2
+    vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+%apptest3
+    vncserver -securitytypes TLSNone,X509None,None "$@"
 
 %post
 	export TURBOVNC_VERSION=2.2.4
@@ -75,12 +81,7 @@ From: centos:centos7
     	export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
 
-%apptest1
-    vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
-%apptest2
-    vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
-%apptest3
-    vncserver -securitytypes TLSNone,X509None,None "$@"
+
 
 %startscript
     echo "Desktop Version $DESKTOP_VERSION"
