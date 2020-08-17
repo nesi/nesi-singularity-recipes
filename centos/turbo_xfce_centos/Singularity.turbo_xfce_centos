@@ -83,6 +83,6 @@ From: centos:centos7
     #chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
     #chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
     whoami
-    #env -u SESSION_MANAGER -u DBUS_SESSION_BUS_ADDRESS vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
-    vncserver -wm xfce4-session -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+    vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+    #vncserver -wm xfce4-session -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
 
