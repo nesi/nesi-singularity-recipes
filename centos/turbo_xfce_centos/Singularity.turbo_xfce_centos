@@ -1,14 +1,12 @@
 BootStrap: docker
 From: centos:centos7
 
-%apptest1
-    vncserver -log "/opt/nesi/vdt/logs/$USER.log" -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+%appstartvnc
+	vncserver -wm xfce4-session -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
 
-%apptest2
-    vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
-
-%apptest3
-    vncserver -securitytypes TLSNone,X509None,None "$@"
+%appconnectvdt
+	display_port=$2
+  	/opt/websockify/run --web /opt/noVNC $1 "localhost:$((display_port+5900))"
 
 %post
 	export TURBOVNC_VERSION=2.2.4
@@ -54,15 +52,12 @@ From: centos:centos7
   	rm -rf turbovnc-${TURBOVNC_VERSION}.x86_64.rpm
 	#echo "\$wm=\"startxfce4\";" >> /etc/turbovncserver.conf
 	
-    # VGL
-    #mkdir -p /etc/yum.repos.d
-    #cd /etc/yum.repos.d
-    #wget https://virtualgl.org/pmwiki/uploads/Downloads/VirtualGL.repo -q
-    #yum -y install VirtualGL
-    #yum --showduplicates list VirtualGL #remove me
-    #yum -y install VirtualGL.x86_64
-    #yumdownloader --source VirtualGL-$VGL_VERSION
-    #debuginfo-install -y VirtualGL #remove me. Probably.
+    	mkdir -p /opt/websockify
+  	wget https://github.com/novnc/websockify/archive/master.tar.gz -q -O - | tar xzf - -C /opt/websockify --strip-components=1
+
+	mkdir -p /opt/noVNC
+  	git clone https://github.com/novnc/noVNC/ /opt/noVNC
+	echo "<meta http-equiv = "refresh" content = " time ; url = link"/>" > /opt/noVNC/index.html
 
 	#Firefox 
 	mkdir -p /opt/firefox
