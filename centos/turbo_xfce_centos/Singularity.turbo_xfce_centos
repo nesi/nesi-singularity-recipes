@@ -57,7 +57,7 @@ From: centos:centos7
 
 	mkdir -p /opt/noVNC
   	git clone https://github.com/novnc/noVNC/ /opt/noVNC
-	echo "<meta http-equiv = "refresh" content = " time ; url = link"/>" > /opt/noVNC/index.html
+	echo "<meta http-equiv=\"refresh\" content="0; URL='vnc.html'" />" > /opt/noVNC/index.html
 
 	#Firefox 
 	mkdir -p /opt/firefox
