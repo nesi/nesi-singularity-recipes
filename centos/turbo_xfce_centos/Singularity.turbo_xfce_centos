@@ -5,8 +5,7 @@ From: centos:centos7
 	vncserver -wm xfce4-session -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
 
 %apprun connectvdt
-	display_port=$2
-  	/opt/websockify/run --web /opt/noVNC $1 "localhost:$((display_port+5900))"
+  	/opt/websockify/run --web /opt/noVNC "$@"
 
 %post
 	export TURBOVNC_VERSION=2.2.4
@@ -80,6 +79,6 @@ From: centos:centos7
     #chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
     #chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
     sleep 2
-    vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
-    #vncserver -wm xfce4-session -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
+    vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1366×768 -securitytypes TLSNone,X509None,None "$@"
+    #vncserver -wm xfce4-session -geometry 1366×768 -securitytypes TLSNone,X509None,None "$@"
 
