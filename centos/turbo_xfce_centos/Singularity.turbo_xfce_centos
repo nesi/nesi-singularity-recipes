@@ -52,7 +52,8 @@ From: centos:centos7
   	wget https://github.com/novnc/websockify/archive/master.tar.gz -q -O - | tar xzf - -C /opt/websockify --strip-components=1
 	# Modify websockify.
 	sed  '/.*self.msg("%s", msg)/i\        msg += \"\\n  - Now open a browser to http:\/\/localhost:\" + str(os.getenv(\"VNC_SOCKET_PORT\"))\n        msg += \"\\n  - Press CTRL + C to kill.\"' /opt/websockify/websockify/websocketproxy.py
-
+	cd /opt/websockify && make
+	
 	mkdir -p /opt/noVNC
   	git clone https://github.com/novnc/noVNC/ /opt/noVNC
 	echo "<meta http-equiv=\"refresh\" content=\"0; URL='vnc.html'\"/>" > /opt/noVNC/index.html
