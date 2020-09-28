@@ -1,9 +1,6 @@
 BootStrap: docker
 From: centos:centos7
 
-%apprun startvdt
-	vncserver -wm xfce4-session -geometry 1920x1080 -securitytypes TLSNone,X509None,None "$@"
-
 %apprun connectvdt
   	/opt/websockify/run --web /opt/noVNC "$@"
 
@@ -75,12 +72,6 @@ From: centos:centos7
     	export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
 
-
-
 %startscript
-    #chmod 0700 -R "$HOME"/.cache "$HOME"/.xfce4 "$HOME"/.config "$HOME"/.fontconfig "$HOME"/.gnupg "$HOME"/.xfce4 > /dev/null 2>&1 || true
-    #chmod 0600 -R "$HOME"/.ICEauthority "$HOME"/.Xauthority "$HOME"/.singularity > /dev/null 2>&1 || true
     sleep 2
-    #vncserver -xstartup /opt/nesi/vdt/xstartup_nesi -geometry 1366×768 -securitytypes TLSNone,X509None,None "$@"
-    #vncserver -wm xfce4-session -geometry 1366×768 -securitytypes TLSNone,X509None,None "$@"
-
+    vncserver -wm xfce4-session -securitytypes TLSNone,X509None,None "$@"
