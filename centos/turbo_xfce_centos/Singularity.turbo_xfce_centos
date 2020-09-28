@@ -1,9 +1,7 @@
 BootStrap: docker
 From: centos:centos7
-
-%apprun connectvdt
-  	/opt/websockify/run --web /opt/noVNC "$@"
-
+%help
+ 	see https://github.com/nesi/nesi-virtual-desktops
 %post
 	export TURBOVNC_VERSION=2.2.4
 	export WEBSOCKIFY_VERSION=0.9.0
@@ -67,16 +65,13 @@ From: centos:centos7
 
 %environment
 	export LC_ALL=C
-  	export PATH=/opt/TurboVNC/bin:${PATH}
-	export PATH=/opt/slurm/bin:${PATH}
+  	export PATH=${PATH}:/opt/TurboVNC/bin:/opt/slurm/bin
     	export LANG="en_US.UTF-8"
     	export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
-
-%startscript
-    sleep 2
-    vncserver -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None "$@"
+	export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/websockify
     
 %runscript 
     #/opt/websockify/run --web /opt/noVNC localhost:$VDT_SOCKET_PORT :$(($(vncserver -list | grep -o [0-9]* | head -1)-5900))
+    if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
     /opt/websockify/run --web /opt/noVNC localhost:$1 :$((5900+$(vncserver -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None 2>&1 | grep -oP '(?<=:).*?(?= )' | head -n1)))
