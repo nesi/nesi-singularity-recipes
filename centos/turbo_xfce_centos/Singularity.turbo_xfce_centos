@@ -57,11 +57,12 @@ From: centos:centos7
 	echo "<meta http-equiv=\"refresh\" content=\"0; URL='vnc.html'\"/>" > /opt/noVNC/index.html
 
 	#Firefox 
-	mkdir -p /opt/firefox
-	cd /opt/firefox
-	wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 -q
-	tar -xjf firefox-${FIREFOX_VERSION}.tar.bz2
-	rm -rf firefox-${FIREFOX_VERSION}.tar.bz2
+	yum install -y firefox
+	# mkdir -p /opt/firefox
+	# cd /opt/firefox
+	# wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 -q
+	# tar -xjf firefox-${FIREFOX_VERSION}.tar.bz2
+	# rm -rf firefox-${FIREFOX_VERSION}.tar.bz2
 
 %environment
 	export LC_ALL=C
