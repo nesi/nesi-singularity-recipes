@@ -16,12 +16,10 @@ From: centos:centos7
 	yum -y --enablerepo=epel install htop
 	yum -y --enablerepo=epel install VirtualGL
 
-
 	yum -y groups install "X Window System"
 	yum -y groupinstall "Xfce"
     	yum -y install gnome-terminal
  	#yum -y install -y xfce-polkit # Needed to stop annoying policykit message.
-
 
 	yum -y install less
 	yum -y install wget
@@ -56,14 +54,14 @@ From: centos:centos7
   	git clone https://github.com/novnc/noVNC/ /opt/noVNC
 	echo "<meta http-equiv=\"refresh\" content=\"0; URL='vnc.html'\"/>" > /opt/noVNC/index.html
 
-	#Firefox 
+	# Firefox 
 	yum install -y firefox
-	# mkdir -p /opt/firefox
-	# cd /opt/firefox
-	# wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 -q
-	# tar -xjf firefox-${FIREFOX_VERSION}.tar.bz2
-	# rm -rf firefox-${FIREFOX_VERSION}.tar.bz2
-
+	
+	# VScode
+	rpm --import https://packages.microsoft.com/keys/microsoft.asc
+	echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc >> /etc/yum.repos.d/vscode.repo
+	yum install code
+	
 %environment
 	export LC_ALL=C
   	export PATH=${PATH}:/opt/TurboVNC/bin:/opt/slurm/bin
@@ -71,6 +69,20 @@ From: centos:centos7
     	export LANGUAGE="en_US"
 	export VGL_VERBOSE=1
 	export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/websockify
+	export TZ="Pacific/Auckland"
+	
+	#SLURM
+	CPATH=/opt/slurm/include
+	PATH="/opt/slurm/sbin:$PATH"
+	
+	#LMOD
+	LMOD_DIR=/usr/share/lmod/lmod/libexec
+	LMOD_arch=x86_64
+	LMOD_CMD=/usr/share/lmod/lmod/libexec/lmod
+	ENABLE_LMOD=1
+	LMOD_SETTARG_CMD=:
+	LMOD_PREPEND_BLOCK=normal
+	LMOD_sys=Linux
     
 %runscript 
     # /opt/websockify/run --web /opt/noVNC localhost:$VDT_SOCKET_PORT :$(($(vncserver -list | grep -o [0-9]* | head -1)-5900))
@@ -79,5 +91,3 @@ From: centos:centos7
     if [[ -z $VDT_DISPLAY_PORT || -z $VDT_SOCKET_PORT ]]; then echo "'VDT_DISPLAY_PORT' & 'VDT_SOCKET_PORT' must be set";exit 1;fi
      
     vncserver ${VDT_VNCOPTS} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
-
-%runscript 
