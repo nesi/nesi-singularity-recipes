@@ -77,6 +77,18 @@ From: centos:centos7
 	PATH="/opt/slurm/sbin:$PATH"
 	
 	#LMOD
+	
+	yum -y install tcl-8.5.13-8.el7.x86_64 \
+	install tcl-devel-8.5.13-8.el7.x86_64 \
+	lua-5.1.4-15.el7.x86_64 \
+	lua-bitop-1.0.2-3.el7.x86_64 \
+	lua-devel-5.1.4-15.el7.x86_64 \
+	lua-filesystem-1.6.2-2.el7.x86_64 \
+	lua-json-1.3.2-2.el7.noarch \
+	lua-lpeg-0.12-1.el7.x86_64 \
+	lua-posix-32-2.el7.x86_64 \
+	lua-term-0.03-3.el7.x86_64 
+	
 	LMOD_DIR=/usr/share/lmod/lmod/libexec
 	LMOD_arch=x86_64
 	LMOD_CMD=/usr/share/lmod/lmod/libexec/lmod
@@ -84,7 +96,12 @@ From: centos:centos7
 	LMOD_SETTARG_CMD=:
 	LMOD_PREPEND_BLOCK=normal
 	LMOD_sys=Linux
-    
+%startscript 
+    if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
+    if [[ -z $VDT_DISPLAY_PORT || -z $VDT_SOCKET_PORT ]]; then echo "'VDT_DISPLAY_PORT' & 'VDT_SOCKET_PORT' must be set";exit 1;fi
+     
+    vncserver ${VDT_VNCOPTS} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
+
 %runscript 
     # /opt/websockify/run --web /opt/noVNC localhost:$VDT_SOCKET_PORT :$(($(vncserver -list | grep -o [0-9]* | head -1)-5900))
     # /opt/websockify/run ${VDT_WEBSOCKOPT} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900+$(vncserver -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None 2>&1 | grep -oP '(?<=:).*?(?= )' | head -n1)))
