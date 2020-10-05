@@ -90,13 +90,13 @@ From: centos:centos7
 	export LIBRARY_PATH="$LIBRARY_PATH:/opt/slurm/lib64:/opt/slurm/lib64/slurm"
 	
 	#LMOD
-	export LMOD_DIR=/usr/share/lmod/lmod/libexec
-	export LMOD_arch=x86_64
-	export LMOD_CMD=/usr/share/lmod/lmod/libexec/lmod
-	export ENABLE_LMOD=1
-	export LMOD_SETTARG_CMD=:
-	export LMOD_PREPEND_BLOCK=normal
-	export LMOD_sys=Linux
+	#export LMOD_DIR=/usr/share/lmod/lmod/libexec
+	#export LMOD_arch=x86_64
+	#export LMOD_CMD=/usr/share/lmod/lmod/libexec/lmod
+	#export ENABLE_LMOD=1
+	#export LMOD_SETTARG_CMD=:
+	##export LMOD_PREPEND_BLOCK=normal
+	#export LMOD_sys=Linux
 	
 %startscript 
     if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
