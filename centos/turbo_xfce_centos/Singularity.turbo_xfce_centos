@@ -97,6 +97,7 @@ From: centos:centos7
 	export LMOD_SETTARG_CMD=:
 	export LMOD_PREPEND_BLOCK=normal
 	export LMOD_sys=Linux
+	
 %startscript 
     if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
     if [[ -z $VDT_DISPLAY_PORT || -z $VDT_SOCKET_PORT ]]; then echo "'VDT_DISPLAY_PORT' & 'VDT_SOCKET_PORT' must be set";exit 1;fi
