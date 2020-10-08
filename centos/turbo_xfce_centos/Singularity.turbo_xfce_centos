@@ -99,12 +99,15 @@ From: centos:centos7
 	#export LMOD_sys=Linux
 	
 %startscript 
+    //Startscript is run for 'persistant' sessions.
     if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
     if [[ -z $VDT_DISPLAY_PORT || -z $VDT_SOCKET_PORT ]]; then echo "'VDT_DISPLAY_PORT' & 'VDT_SOCKET_PORT' must be set";exit 1;fi
      
     vncserver ${VDT_VNCOPTS} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
-
+    // If started on node other than host, create remote tunnel.
+    if [[ -z ${VDT_TUNNEL_HOST} ]];then ssh -N -R ${VDT_SOCKET_PORT}:127.0.0.1:${VDT_SOCKET_PORT} ${VDT_TUNNEL_HOST};fi
 %runscript 
+    //Runscript is run for 'ephemeral' sessions.
     # /opt/websockify/run --web /opt/noVNC localhost:$VDT_SOCKET_PORT :$(($(vncserver -list | grep -o [0-9]* | head -1)-5900))
     # /opt/websockify/run ${VDT_WEBSOCKOPT} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900+$(vncserver -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None 2>&1 | grep -oP '(?<=:).*?(?= )' | head -n1)))
     if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
