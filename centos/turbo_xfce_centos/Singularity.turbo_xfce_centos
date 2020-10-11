@@ -104,7 +104,7 @@ From: centos:centos7
     if [[ -z $VDT_DISPLAY_PORT || -z $VDT_SOCKET_PORT ]]; then echo "'VDT_DISPLAY_PORT' & 'VDT_SOCKET_PORT' must be set";exit 1;fi
     
     // If started on node other than host, create remote tunnel.
-    if [[ -z ${VDT_TUNNEL_HOST} ]];then ssh -v -N -R ${VDT_SOCKET_PORT}:127.0.0.1:${VDT_SOCKET_PORT} ${VDT_TUNNEL_HOST} &;fi
+    if [[ -n ${VDT_TUNNEL_HOST} ]];then ssh -v -N -R ${VDT_SOCKET_PORT}:127.0.0.1:${VDT_SOCKET_PORT} ${VDT_TUNNEL_HOST} & fi
 
     vncserver ${VDT_VNCOPTS} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
 %runscript 
