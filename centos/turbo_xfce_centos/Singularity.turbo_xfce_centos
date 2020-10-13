@@ -101,7 +101,8 @@ From: centos:centos7
 %startscript     
     # If started on node other than host, create remote tunnel.
     if [[ -n ${VDT_TUNNEL_HOST} ]];then 
-        ssh -v -o ExitOnForwardFailure=yes -N -R ${VDT_SOCKET_PORT}:localhost:${VDT_SOCKET_PORT} ${VDT_TUNNEL_HOST} & 
+    	echo "Remote tunnel will be setup"
+        ssh -vfNT -o ExitOnForwardFailure=yes -R ${VDT_SOCKET_PORT}:localhost:${VDT_SOCKET_PORT} ${VDT_TUNNEL_HOST}
         tunnel_pid="$!"
         sleep 5
         if [[ "$(ps -o s -h -p $tunnel_pid)"! = [SR] ]];then
@@ -109,6 +110,7 @@ From: centos:centos7
 	    exit 1
 	fi
     fi
+    echo "Instance is local. No forwarding required."
 
     vncserver ${VDT_VNCOPTS} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
 %runscript 
