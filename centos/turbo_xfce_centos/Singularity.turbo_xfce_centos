@@ -109,9 +109,10 @@ From: centos:centos7
     	    echo "Failed to open tunnel from $(hostname)"
 	    exit 1
 	fi
+	echo "Tunnel alive after 5 seconds."
+    else
+    	echo "Instance is local. No forwarding required."
     fi
-    echo "Instance is local. No forwarding required."
-
     vncserver ${VDT_VNCOPTS} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
 %runscript 
     # Runscript is run for 'ephemeral' sessions.
