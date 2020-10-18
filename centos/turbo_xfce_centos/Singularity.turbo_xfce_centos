@@ -23,6 +23,7 @@ From: centos:centos7
 
 	yum -y install less
 	yum -y install wget
+	yum -y install unzip
 	yum -y install python
     	yum -y install numpy
 	yum -y install git
