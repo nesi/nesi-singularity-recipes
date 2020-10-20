@@ -15,7 +15,7 @@ From: centos:centos7
 
 	yum -y --enablerepo=epel install htop
 	yum -y --enablerepo=epel install VirtualGL
-	yum -y install snapd && systemctl enable --now snapd.socket
+	yum -y install snapd && systemctl enable --now snapd.socket && ln -s /var/lib/snapd/snap /snap
 	
 	yum -y groups install "X Window System"
 	yum -y groupinstall "Xfce"
