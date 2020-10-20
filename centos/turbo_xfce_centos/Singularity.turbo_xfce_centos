@@ -15,7 +15,8 @@ From: centos:centos7
 
 	yum -y --enablerepo=epel install htop
 	yum -y --enablerepo=epel install VirtualGL
-
+	yum -y install snapd && systemctl enable --now snapd.socket
+	
 	yum -y groups install "X Window System"
 	yum -y groupinstall "Xfce"
     	yum -y install gnome-terminal
@@ -46,16 +47,19 @@ From: centos:centos7
 	lua-posix-32-2.el7.x86_64 \
 	lua-term-0.03-3.el7.x86_64 
 	
+	# Install Virtual GL
 	mkdir -p /etc/yum.repos.d
     	cd /etc/yum.repos.d
 	wget https://virtualgl.org/pmwiki/uploads/Downloads/VirtualGL.repo
     	yum -y install VirtualGL
-
+	
+	# Install TurboVNC
 	wget https://sourceforge.net/projects/turbovnc/files/${TURBOVNC_VERSION}/turbovnc-${TURBOVNC_VERSION}.x86_64.rpm -q
   	yum install -y turbovnc-${TURBOVNC_VERSION}.x86_64.rpm
   	rm -rf turbovnc-${TURBOVNC_VERSION}.x86_64.rpm
 	#echo "\$wm=\"startxfce4\";" >> /etc/turbovncserver.conf
 	
+	# Install websockify
     	mkdir -p /opt/websockify
   	wget https://github.com/novnc/websockify/archive/master.tar.gz -q -O - | tar xzf - -C /opt/websockify --strip-components=1
 	# Modify websockify.
@@ -67,12 +71,14 @@ From: centos:centos7
 	
 	cd /opt/websockify && make 
 	
+	# Install noVNC
 	mkdir -p /opt/noVNC
   	git clone https://github.com/novnc/noVNC/ /opt/noVNC
 	echo "<meta http-equiv=\"refresh\" content=\"0; URL='vnc.html'\"/>" > /opt/noVNC/index.html
 
 	# Firefox 
 	yum install -y firefox
+	snap install chocolate-doom-jdstrand
 	
 	# VScode
 	rpm --import https://packages.microsoft.com/keys/microsoft.asc
