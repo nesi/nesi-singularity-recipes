@@ -32,6 +32,7 @@ From: centos:centos7
 	yum -y install polkit
 	yum -y install libvncserver
 	yum -y install turbojpeg
+	yum -y install diffutils
 	yum -y install -y gcc-c++ # Needed to compile Websocketify rebind lib.
 
 	yum -y install mesa-libGLU
@@ -128,6 +129,7 @@ From: centos:centos7
     fi
     export ISPER="true" # Is persistant (for websockify messages)
     vncserver ${VDT_VNCOPTS} -log ${VDT_LOGFILE} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
+
 %runscript 
     # Runscript is run for 'ephemeral' sessions.
     if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
