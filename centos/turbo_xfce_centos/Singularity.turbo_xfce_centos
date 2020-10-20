@@ -59,8 +59,12 @@ From: centos:centos7
     	mkdir -p /opt/websockify
   	wget https://github.com/novnc/websockify/archive/master.tar.gz -q -O - | tar xzf - -C /opt/websockify --strip-components=1
 	# Modify websockify.
-	sed  '/.*self.msg("%s", msg)/i\        msg += \"\\n  - Now open a browser to http:\/\/localhost:\" + str(os.getenv(\"VNC_SOCKET_PORT\"))\n        msg += \"\\n  - Press CTRL + C to kill.\"' \
-	/opt/websockify/websockify/websocketproxy.py
+	# This just changes print statements. Can be safely commented out.
+	wget https://raw.githubusercontent.com/nesi/nesi-virtual-desktops/master/nesi_websockify_patch  	
+	patch --verbose /opt/websockify/websockify/websocketproxy.py < nesi_websockify_patch
+	#sed  '/.*self.msg("%s", msg)/i\        msg += \"\\n  - Now open a browser to http:\/\/localhost:\" + str(os.getenv(\"VNC_SOCKET_PORT\"))\n        msg += \"\\n  - Press CTRL + C to kill.\"' \
+	# /opt/websockify/websockify/websocketproxy.py
+	
 	cd /opt/websockify && make 
 	
 	mkdir -p /opt/noVNC
@@ -114,6 +118,7 @@ From: centos:centos7
     else
     	echo "Instance is local. No forwarding required."
     fi
+    export ISPER="true" # Is persistant (for websockify messages)
     vncserver ${VDT_VNCOPTS} -log ${VDT_LOGFILE} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT} && /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
 %runscript 
     # Runscript is run for 'ephemeral' sessions.
