@@ -33,6 +33,7 @@ From: centos:centos7
 	yum -y install libvncserver
 	yum -y install turbojpeg
 	yum -y install diffutils
+	yum -y install patch
 	yum -y install -y gcc-c++ # Needed to compile Websocketify rebind lib.
 
 	yum -y install mesa-libGLU
