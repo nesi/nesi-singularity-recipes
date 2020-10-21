@@ -19,7 +19,7 @@ From: centos:centos7
 	yum -y groupinstall "Xfce"
     	yum -y install gnome-terminal
 	yum -y groups install "X Window System"
- 	yum -y install -y xfce-polkit # Needed to stop annoying policykit message.
+ 	#yum -y install -y xfce-polkit # Needed to stop annoying policykit message.
 
 	yum -y install git
 	yum -y install less
