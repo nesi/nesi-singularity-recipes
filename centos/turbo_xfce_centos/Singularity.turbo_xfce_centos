@@ -114,30 +114,7 @@ From: centos:centos7
 	#export LMOD_sys=Linux
 	
 %startscript     
-    # If started on node other than host, create remote tunnel.
-    if [[ -n ${VDT_TUNNEL_HOST} ]];then 
-    	echo "Remote tunnel will be setup"
-        ssh -vfNT -o ExitOnForwardFailure=yes -R ${VDT_SOCKET_PORT}:localhost:${VDT_SOCKET_PORT} ${VDT_TUNNEL_HOST}
-        tunnel_pid="$!"
-        sleep 5
-        if [[ "$(ps -o s -h -p $tunnel_pid)"! = [SR] ]];then
-    	    echo "Failed to open tunnel from $(hostname)"
-	    exit 1
-	fi
-	echo "Tunnel alive after 5 seconds."
-    else
-    	echo "Instance is local. No forwarding required."
-    fi
-    export ISPER="true" # Is persistant (for websockify messages)
-    vncserver ${VDT_VNCOPTS} -log ${VDT_LOGFILE} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT}
-    sleep 3
-    vncserver -list
-    /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
+    . .vdt_startscript 
 
 %runscript 
-    # Runscript is run for 'ephemeral' sessions.
-    if [[ -x "$VDT_SETUP" ]]; then source "$VDT_SETUP";fi
-    if [[ -z $VDT_DISPLAY_PORT || -z $VDT_SOCKET_PORT ]]; then echo "'VDT_DISPLAY_PORT' & 'VDT_SOCKET_PORT' must be set";exit 1;fi
-     
-    vncserver ${VDT_VNCOPTS} -log ${VDT_LOGFILE} -wm xfce4-session -autokill -securitytypes TLSNone,X509None,None :${VDT_DISPLAY_PORT}
-    /opt/websockify/run ${VDT_WEBSOCKOPTS} --web /opt/noVNC localhost:${VDT_SOCKET_PORT} :$((5900 + ${VDT_DISPLAY_PORT})) 
+    . .vdt_runscript
